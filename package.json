@@ -1,0 +1,17 @@
+{
+  "name": "discord-screenshot-bot",
+  "version": "1.0.0",
+  "description": "",
+  "license": "GPL-3.0",
+  "author": "keyl3n",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "discord.js": "^14.21.0",
+    "dotenv": "^17.2.1",
+    "screenshot-desktop": "^1.15.1"
+  }
+}

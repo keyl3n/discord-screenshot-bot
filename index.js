@@ -32,6 +32,16 @@ async function registerCommands() {
     }
 }
 
+function getTimestamp() {
+    const now = new Date();
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `[${hours}:${minutes}:${seconds}]`;
+}
+
 client.once(Events.ClientReady, async () => {
     console.log(`Logged in as ${client.user.tag}`);
     await registerCommands();
@@ -53,7 +63,11 @@ client.on(Events.GuildCreate, guild => {
 });
 
 client.on(Events.InteractionCreate, async interaction => {
-    if (interaction.user.id != process.env.OWNER_ID) { return interaction.reply({ content: 'You do not have permission to use this.', ephemeral: true }) }
+    if (interaction.user.id != process.env.OWNER_ID) {
+        interaction.reply({ content: 'You do not have permission to use this.', ephemeral: true });
+        console.log(`${getTimestamp()} @${interaction.user.username} tried to use /screenshot`);
+        return;
+    }
     if (interaction.isAutocomplete()) {
         const focusedOption = interaction.options.getFocused(true);
 
@@ -99,6 +113,8 @@ client.on(Events.InteractionCreate, async interaction => {
         console.error(err);
         await interaction.editReply('Failed to capture screenshot.');
     }
+
+    console.log(`${getTimestamp()} Sent screenshots requested by @${interaction.user.username}`)
 
 });
 

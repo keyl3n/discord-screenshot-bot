@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, Events, AttachmentBuilder, REST, Routes, SlashCommandBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, Events, AttachmentBuilder, REST, Routes, SlashCommandBuilder, MessageFlags } = require('discord.js');
 const screenshot = require('screenshot-desktop');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -58,13 +58,13 @@ client.once(Events.ClientReady, async () => {
 client.on(Events.GuildCreate, guild => {
     if (guild.id !== process.env.GUILD_ID) {
         console.log(`Joined unauthorized guild: ${guild.name}, leaving...`);
-        guild.leave();
+        await guild.leave();
     }
 });
 
 client.on(Events.InteractionCreate, async interaction => {
     if (interaction.user.id != process.env.OWNER_ID) {
-        interaction.reply({ content: 'You do not have permission to use this.', ephemeral: true });
+        await interaction.reply({ content: 'You do not have permission to use this.', flags: [MessageFlags.Ephemeral] });
         console.log(`${getTimestamp()} @${interaction.user.username} tried to use /screenshot`);
         return;
     }
@@ -115,7 +115,6 @@ client.on(Events.InteractionCreate, async interaction => {
     }
 
     console.log(`${getTimestamp()} Sent screenshots requested by @${interaction.user.username}`)
-
 });
 
 client.login(process.env.DISCORD_TOKEN);
